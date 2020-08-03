@@ -1,3 +1,4 @@
+import pytesseract
 import cv2
 import numpy as np
 import pyautogui
@@ -32,10 +33,10 @@ def click_and_crop(event, x, y, flags, param):
 if __name__ == "__main__":
     myScreenshot = pyautogui.screenshot()
     image = np.array(myScreenshot)
-
     # load the image, clone it, and setup the mouse callback function
     clone = image.copy()
     cv2.namedWindow("image")
+    cv2.moveWindow("image", 0, 0)
     cv2.setMouseCallback("image", click_and_crop)
 
     # keep looping until the 'q' key is pressed
@@ -53,8 +54,17 @@ if __name__ == "__main__":
     # from teh image and display it
     if len(refPt) == 2:
         roi = clone[refPt[0][1] : refPt[1][1], refPt[0][0] : refPt[1][0]]
+        print("properly in")
         cv2.imshow("ROI", roi)
         cv2.waitKey(0)
 
+    gray = cv2.cvtColor(roi, cv2.COLOR_RGB2GRAY)
+    gray, img_bin = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    gray = cv2.bitwise_not(img_bin)
+    kernel = np.ones((2, 1), np.uint8)
+    img = cv2.erode(gray, kernel, iterations=1)
+    img = cv2.dilate(img, kernel, iterations=1)
+    out_below = pytesseract.image_to_string(img)
+    print(out_below)
     # close all open windows
     cv2.destroyAllWindows()
