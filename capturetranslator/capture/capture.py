@@ -78,6 +78,6 @@ class Capture(object):
         img = cv2.dilate(img, kernel, iterations=1)
         out_below = pytesseract.image_to_string(img)
 
-        print(out_below)
         # close all open windows
         cv2.destroyAllWindows()
+        return out_below
