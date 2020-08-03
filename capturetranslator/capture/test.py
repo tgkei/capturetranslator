@@ -35,6 +35,8 @@ if __name__ == "__main__":
     image = np.array(myScreenshot)
     # load the image, clone it, and setup the mouse callback function
     clone = image.copy()
+
+    # create cv2 window and locate on 0, 0
     cv2.namedWindow("image")
     cv2.moveWindow("image", 0, 0)
     cv2.setMouseCallback("image", click_and_crop)
@@ -58,6 +60,7 @@ if __name__ == "__main__":
         cv2.imshow("ROI", roi)
         cv2.waitKey(0)
 
+    # gray scale and preprocessing image to improve ocr
     gray = cv2.cvtColor(roi, cv2.COLOR_RGB2GRAY)
     gray, img_bin = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
     gray = cv2.bitwise_not(img_bin)
@@ -65,6 +68,7 @@ if __name__ == "__main__":
     img = cv2.erode(gray, kernel, iterations=1)
     img = cv2.dilate(img, kernel, iterations=1)
     out_below = pytesseract.image_to_string(img)
+
     print(out_below)
     # close all open windows
     cv2.destroyAllWindows()
