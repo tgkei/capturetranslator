@@ -1,4 +1,5 @@
-import os
+from capture.capture import Capture
 
 if __name__ == "__main__":
-    pass
+    string = Capture.to_str()
+    print(string)

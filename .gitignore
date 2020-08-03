@@ -1,2 +1,5 @@
 # ignore vim
 .vim/*
+
+# ignore pycache
+**/__pycache__
