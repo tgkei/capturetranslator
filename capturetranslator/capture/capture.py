@@ -4,10 +4,11 @@ import numpy as np
 import pyautogui
 
 
-class Capture(object):
-    refPt = []
-    cropping = False
+refPt = []
+cropping = False
 
+
+class Capture(object):
     def __new__(cls):
         if not hasattr(cls, "instance"):
             cls.instance = super(Capture, cls).__new__(cls)
@@ -17,6 +18,7 @@ class Capture(object):
     def to_str(cls):
         # callback function
         def click_and_crop(event, x, y, flags, param):
+            global refPt, cropping
             # if the left mouse button was clicked, record the starting
             # (x, y) coordinates and indicate that cropping is being
             # performed
